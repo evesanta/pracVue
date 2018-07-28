@@ -12,15 +12,16 @@ Vue.use(Vuex)
 const state = {
   name: '',
   realtime: '',
-  auth: ''
+  auth: false
 }
 
 function check (num) {
+  if (isNaN(num)) return false
   for (var i = 0; i < 10; i++) {
     num = (num * 11177) % 14737
   }
-  if (num === 470) return 'ok'
-  return 'ng'
+  if (num === 470) return true
+  return false
 }
 
 const actions = {
@@ -31,7 +32,7 @@ const actions = {
     commit(REALTIME, name)
   },
   [CHANGE_AUTH] ({ commit }, num) {
-    commit(CHANGE_AUTH, check(num))
+    commit(CHANGE_AUTH, num)
   }
 }
 
@@ -48,7 +49,7 @@ const mutations = {
     state.realtime = name
   },
   [CHANGE_AUTH] (state, num) {
-    state.auth = num
+    state.auth = check(num)
   }
 }
 

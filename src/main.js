@@ -15,3 +15,14 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+
+router.beforeEach((to, from, next) => {
+  console.log(to.path)
+  if (store.state.auth && to.path === '/login') {
+    next({path: '/'})
+  } else if (to.matched.some(record => record.meta.requiresAuth) && !store.state.auth) {
+    next({path: '/login', query: {redirect: to.fullPath}})
+  } else {
+    next()
+  }
+})
