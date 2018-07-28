@@ -3,14 +3,24 @@ import Vue from 'vue'
 
 import {
   CHANGE_NAME,
-  REALTIME
+  REALTIME,
+  CHANGE_AUTH
 } from './mutation-types'
 
 Vue.use(Vuex)
 
 const state = {
   name: '',
-  realtime: ''
+  realtime: '',
+  auth: ''
+}
+
+function check (num) {
+  for (var i = 0; i < 10; i++) {
+    num = (num * 11177) % 14737
+  }
+  if (num === 470) return 'ok'
+  return 'ng'
 }
 
 const actions = {
@@ -19,12 +29,15 @@ const actions = {
   },
   [REALTIME] ({ commit }, name) {
     commit(REALTIME, name)
+  },
+  [CHANGE_AUTH] ({ commit }, num) {
+    commit(CHANGE_AUTH, check(num))
   }
 }
 
 const getters = {
-  getName: state => state.name
-  // getRealTime: state => state.realtime
+  getName: state => state.name,
+  getAuth: state => state.auth
 }
 
 const mutations = {
@@ -33,6 +46,9 @@ const mutations = {
   },
   [REALTIME] (state, name) {
     state.realtime = name
+  },
+  [CHANGE_AUTH] (state, num) {
+    state.auth = num
   }
 }
 
