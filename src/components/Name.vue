@@ -1,6 +1,6 @@
 <template>
   <div class="hoge">
-    <input @change="CHANGE_NAME($event.target.value)" :value="message" @input="updateMessage" type="text">
+    <input @change="CHANGE_NAME($event.target.value)" v-model="message" type="text">
     <div class="fuga">
       名前は = {{ getName }}
     </div>
@@ -11,22 +11,24 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { CHANGE_NAME } from '../vuex/mutation-types'
 export default {
   methods: {
     ...mapActions([
       CHANGE_NAME
-    ]),
-    updateMessage (e) {
-      this.$store.commit('REALTIME', e.target.value)
-    }
+    ])
   },
   computed: {
     ...mapGetters(['getName']),
-    ...mapState({
-      message: state => state.realtime
-    })
+    message: {
+      get () {
+        return this.$store.state.realtime
+      },
+      set (value) {
+        this.$store.commit('REALTIME', value)
+      }
+    }
   }
 }
 </script>

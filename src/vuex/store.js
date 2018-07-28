@@ -33,9 +33,6 @@ const mutations = {
   },
   [REALTIME] (state, name) {
     state.realtime = name
-  },
-  updateMessage (state, message) {
-    state.obj.message = message
   }
 }
 
