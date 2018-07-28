@@ -4,6 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './vuex/store.js' // 追加
+import VueCookie from 'vue-cookie'
+
+Vue.use(VueCookie)
 
 Vue.config.productionTip = false
 
@@ -25,4 +28,8 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+document.addEventListener('DOMContentLoaded', function (event) {
+  store.commit('CHANGE_AUTH', Vue.cookie.get('test'))
 })

@@ -1,7 +1,6 @@
 <template>
   <div>
     <input type="text" v-model="number" />
-    <input type="submit" value="Login" v-on:click="CHANGE_AUTH(number)">
     <input type="submit" value="Login" v-on:click="login()">
     <div>
       {{ getAuth }}
@@ -31,6 +30,7 @@ export default {
     login () {
       console.log(this.$route.query.redirect)
       store.commit(CHANGE_AUTH, this.number)
+      this.$cookie.set('test', this.number)
       if (store.state.auth) router.push(this.$route.query.redirect || '/')
     }
   },
