@@ -1,11 +1,11 @@
 <template>
   <div class="hoge">
-    <input @change="CHANGE_NAME($event.target.value)" v-model="message" type="text">
+    <input @change="CHANGE_NAME($event.target.value)" v-model="realtime" type="text">
     <div class="fuga">
       名前は = {{ getName }}
     </div>
     <div class="foo">
-      メッセージは = {{ message }}
+      リアルタイムは = {{ realtime }}
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getName']),
-    message: {
+    realtime: {
       get () {
         return this.$store.state.realtime
       },

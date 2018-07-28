@@ -6,7 +6,7 @@ Macを想定して書いているため，Winユーザは適宜コマンド等�
 
 [Vue.js + Vuexで開発をしてみよう！](https://engineer.recruit-lifestyle.co.jp/techblog/2016-09-15-try-vue-flux/)のサイトを参考に作成しました．
 
-以下の知識がない人はggrksです  
+以下の知識がない人はggrksです．
 
 * HTML
 * JavaScript
@@ -37,8 +37,7 @@ $ cd first_vuex
 ```
 
 ここで，以下のコマンドを実行すると，
-`http://localhost:8080/`にアクセスすることができます．  
-やってみてください．
+`http://localhost:8080/`にアクセスすることができます．
 
 ```
 $ npm run dev
@@ -56,7 +55,7 @@ $ npm run dev
 * components/HelloWorld.vue
 
 ### ちょっといじってみようか！
-では，`components/HelloWorld.vue` を開いて，
+では，`src/components/HelloWorld.vue` を開いて，
 上の方にある，`h2`タグの中身を変更して見ましょう．
 
 ```html
@@ -84,7 +83,7 @@ Vuexの詳しいことは[Vuex公式](https://vuex.vuejs.org/)  をご覧下さ�
 以下のコマンドを実行して，Vuexを導入します．
 
  ```
- $ npm i --S vuex
+ $ npm i -S vuex
  ```
  
 #### 次に`store.js`を作成します．
@@ -131,6 +130,8 @@ new Vue({
 ### Vuex体験
 Vuexでは以下の４つで情報を回しています．
 
+![](https://vuex.vuejs.org/vuex.png)
+
 * Vue Components（アプリケーションの実体）
 * Actions（ユーザの操作/APIとのやりとり）
 * Mutations（状態への変更処理）
@@ -139,7 +140,7 @@ Vuexでは以下の４つで情報を回しています．
 そのため，それぞれについて記述をしなければいけません．ではStateから記述していきましょう．
 
 #### Stateの記述
-これは簡単に表現すると，情報を置いておく場所です．  
+簡単に表現すると，情報を置いておく場所です．  
 なにを保存するのかを記述しなければなりません．今回は`name`という名の情報を保存することにします．  
 `store.js`の中身を変更してください．これにより，`name`を保存する場所を確保することができました．
 
@@ -152,7 +153,7 @@ const state = {
 #### mutation typeを作る
 mutationとは，手続きや，操作といったことを指します．  
 
-これは参考にしたサイトそのままになります.
+ここの説明は，ほぼ参考にしたサイトそのままになります.
 > アプリケーション内でユーザーが行なうであろう操作について記述していきます。  
 > いきなりActionsを作る前に、新しく、src/vuex/mutation-types.jsというファイルを作りましょう。
 名前が示す通り、stateをmutate（変更）する操作のタイプを記述します。
@@ -250,7 +251,7 @@ export default {
 コンポーネントを作ったので，これを表示しましょう！  
 簡単に表示するために，`src/components/HelloWorld.vue`を以下のように変更して見てください．場所の節約のため，上の方と，`script`タグの場所のみ載せています．他は変更しません．
 
-```
+```html
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
@@ -280,3 +281,95 @@ export default {
 テキストボックスに文字を入れてEnterキーを押すと下にその言葉が表示されます．
 
 お疲れ様でした．
+
+## せっかくなので，リアルタイムで入力した内容が変更されるようにしましょう!
+
+上で行ったことは，テキストエリアに文字を入力して，Enterを押すと更新されるものでした．  
+これでは物足りないので，リアルタイムで入力した内容が更新されるようにして見ましょう．  
+vueでは`v-vind`を用いてこのようなことを行っていました．今回もそれに習ってやります．  
+
+では，復習を兼ねて行いましょう!
+
+### `src/vuex/mutation-types.js`に追記
+まずは，どのような処理を行いたいかをここに追記しましょう．以下の内容を追記してください．
+```js
+export const REALTIME = 'REALTIME'
+```
+
+### `src/vuex/store.js`を変更 
+まず，`state`の中身を変更して，どのような情報を登録するかを書きます．
+
+```js
+const state = {
+  name: '',
+  realtime: ''
+}
+```
+
+そして，`action`を追加.
+
+```js
+const actions = {
+  [CHANGE_NAME] ({ commit }, name) {
+    commit(CHANGE_NAME, name)
+  },
+  [REALTIME] ({ commit }, name) {
+    commit(REALTIME, name)
+  }
+}
+```
+
+`mutations`を変更します．
+
+```
+const mutations = {
+  [CHANGE_NAME] (state, name) {
+    state.name = name
+  },
+  [REALTIME] (state, name) {
+    state.realtime = name
+  }
+}
+```
+
+
+これで`store.js`内は完了しました．今回は，v-vindを用いるので，getterは必要ありません．
+
+### Vue Componentsを作成
+次はVue Componentsを作っていきましょう．
+
+`src/components/Name.vue`を以下の場所を変更してください.
+
+```
+<template>
+  <div class="hoge">
+    <input @change="CHANGE_NAME($event.target.value)" v-model="realtime" type="text">
+    <div class="fuga">
+      名前は = {{ getName }}
+    </div>
+    <div class="foo">
+      リアルタイムは = {{ realtime }}
+    </div>
+  </div>
+</template>
+
+:
+:
+
+  computed: {
+    ...mapGetters(['getName']),
+    realtime: {
+      get () {
+        return this.$store.state.realtime
+      },
+      set (value) {
+        this.$store.commit('REALTIME', value)
+      }
+    }
+  }
+```
+
+`template`内の`input`タグに`v-vind`を追加した後，リアルタイムで入力した文字が更新されるところを追加しました．  
+その後，`computed`内にメソッドを追加しました．`v-vind`を利用するためのものです．`get`と`set`をこのように記述すると`v-vind`を利用することができます．
+
+これで変更する場所は終わりです．実際に確認して見てください．

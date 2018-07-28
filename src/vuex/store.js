@@ -23,8 +23,8 @@ const actions = {
 }
 
 const getters = {
-  getName: state => state.name,
-  getRealTime: state => state.realtime
+  getName: state => state.name
+  // getRealTime: state => state.realtime
 }
 
 const mutations = {
