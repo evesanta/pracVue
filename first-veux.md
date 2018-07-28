@@ -74,7 +74,7 @@ _開発中はこのコマンドを実行したままで大丈夫です．_
 $ npm run dev
 ```
 
-![](/Users/Seiya/Documents/webapp/pracVuex/md_pic/home.png)
+![](./md_pic/home.png)
 
 
 では，次行ってみよう!
