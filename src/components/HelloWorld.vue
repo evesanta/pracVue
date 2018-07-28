@@ -2,6 +2,7 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2>初めてのVuex</h2>
+    <Name></Name>
     <ul>
       <li>
         <a
@@ -84,12 +85,16 @@
 </template>
 
 <script>
+import Name from './Name'
 export default {
   name: 'HelloWorld',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  components: {
+    Name
   }
 }
 </script>
